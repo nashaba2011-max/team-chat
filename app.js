@@ -22,6 +22,13 @@
     selected: new Set(),
     channel: null,
     tmpSeq: 0,
+    filter: "all",
+  };
+
+  // أيقونات ثابتة (نص ثابت من الكود — ما فيه أي بيانات مستخدم)
+  const ICONS = {
+    announce: '<svg viewBox="0 0 24 24"><path d="M4 10v4h3l7 4V6L7 10z"/><path d="M17.5 9a4 4 0 0 1 0 6"/></svg>',
+    check: '<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
   };
 
   /* ================= أدوات عامة ================= */
@@ -242,7 +249,7 @@
     const a = el("span", "avatar " + size);
     if (c.kind === "announcement") {
       a.classList.add("announce");
-      a.textContent = "📢";
+      a.innerHTML = ICONS.announce;
     } else if (c.kind === "group") {
       a.classList.add("group");
       a.textContent = initials(c.title);
@@ -255,9 +262,20 @@
   function renderConversations() {
     const list = $("#conv-list");
     list.replaceChildren();
-    $("#conv-empty").hidden = state.convs.length > 0;
+    const q = $("#conv-search").value.trim();
+    const f = state.filter;
+    const shown = state.convs.filter(
+      (c) =>
+        (f === "all" || (f === "unread" && c.unread > 0) || (f === "groups" && c.kind === "group")) &&
+        (!q || (c.title || "").includes(q) || (c.last_body || "").includes(q))
+    );
+    const empty = $("#conv-empty");
+    empty.hidden = shown.length > 0;
+    if (!state.convs.length) empty.textContent = 'لا توجد محادثات بعد. اضغط "محادثة جديدة" وابدأ مع زميل.';
+    else if (q) empty.textContent = "لا توجد نتائج لهذا البحث.";
+    else empty.textContent = "لا توجد محادثات في هذا القسم.";
 
-    for (const c of state.convs) {
+    for (const c of shown) {
       const li = el("li");
       const btn = el("button", "conv");
       if (c.kind === "announcement") btn.classList.add("pinned");
@@ -274,7 +292,10 @@
         else if (c.kind !== "direct") preview = (c.last_sender_name || "").split(" ")[0] + ": " + c.last_body;
         else preview = c.last_body;
       }
-      bottom.append(el("span", "conv-last", preview.replace(/\s+/g, " ")));
+      const last = el("span", "conv-last");
+      if (c.kind === "announcement") last.append(el("span", "pin-tag", "مثبّتة"));
+      last.append(el("span", null, preview.replace(/\s+/g, " ")));
+      bottom.append(last);
       if (c.unread > 0) bottom.append(el("span", "badge", c.unread > 99 ? "99+" : String(c.unread)));
 
       body.append(top, bottom);
@@ -284,6 +305,15 @@
       list.append(li);
     }
   }
+
+  document.querySelectorAll(".chip-btn").forEach((b) =>
+    b.addEventListener("click", () => {
+      state.filter = b.dataset.filter;
+      document.querySelectorAll(".chip-btn").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      renderConversations();
+    })
+  );
+  $("#conv-search").addEventListener("input", renderConversations);
 
   /* ================= شاشة المحادثة ================= */
 
@@ -409,7 +439,9 @@
         : m.pending
         ? "جاري الإرسال…"
         : fmtClock.format(new Date(m.created_at));
-      bubble.append(el("span", "meta", meta));
+      const metaEl = el("span", "meta", meta);
+      if (mine && !m.pending && !m.failed) metaEl.insertAdjacentHTML("beforeend", ICONS.check);
+      bubble.append(metaEl);
       if (m.failed) bubble.addEventListener("click", () => retry(m));
 
       row.append(bubble);

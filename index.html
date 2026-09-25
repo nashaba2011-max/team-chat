@@ -3,18 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-  <meta name="theme-color" content="#123C35">
+  <meta name="theme-color" content="#102A43">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="محادثات الفريق">
   <title>محادثات الفريق</title>
   <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="icon-192.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap">
-  <link rel="stylesheet" href="style.css?v=1">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 <div id="app">
@@ -27,9 +27,11 @@
   <!-- ===== تسجيل الدخول ===== -->
   <section id="view-login" class="view login" hidden>
     <div class="login-brand">
-      <img src="icons/icon-192.png" alt="" width="72" height="72">
-      <h1>محادثات الفريق</h1>
-      <p>للموظفين فقط — ادخل برقمك الوظيفي</p>
+      <span class="logo-mark"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8"/><path d="M8 12.5h5"/></svg></span>
+      <div>
+        <h1>محادثات الفريق</h1>
+        <p>منصة التواصل الداخلية لموظفي المكتب</p>
+      </div>
     </div>
     <form id="login-form" class="card" novalidate>
       <label for="login-no">الرقم الوظيفي</label>
@@ -37,9 +39,12 @@
       <label for="login-pass">كلمة السر</label>
       <input id="login-pass" type="password" dir="ltr" autocomplete="current-password" required>
       <p id="login-error" class="field-error" role="alert"></p>
-      <button type="submit" class="btn primary block">دخول</button>
+      <button type="submit" class="btn primary block">تسجيل الدخول</button>
     </form>
-    <p class="muted small center">نسيت كلمة السر؟ كلّم الإدارة.</p>
+    <div class="login-foot">
+      <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+      <span>الحسابات تُنشأ من الإدارة فقط. نسيت كلمة السر؟ تواصل مع الإدارة.</span>
+    </div>
   </section>
 
   <!-- ===== قائمة المحادثات ===== -->
@@ -48,21 +53,33 @@
       <h1>المحادثات</h1>
       <div class="topbar-actions">
         <button id="btn-admin" class="icon-btn" aria-label="إدارة الموظفين" hidden>
-          <svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-8 0a3 3 0 1 0-3-3 3 3 0 0 0 3 3Zm0 2c-2.7 0-6 1.3-6 3.5V19h6v-2.5c0-1.2.5-2.3 1.4-3.2A9 9 0 0 0 8 13Zm8 0c-3 0-7 1.5-7 4v2h14v-2c0-2.5-4-4-7-4Z"/></svg>
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.3-5.5 6.5-5.5s5.9 2 6.5 5.5"/><path d="M16 4.8a3.5 3.5 0 0 1 0 6.4"/><path d="M18 14.8c1.9.7 3.2 2.5 3.5 5.2"/></svg>
         </button>
         <button id="btn-me" class="icon-btn" aria-label="حسابي">
-          <svg viewBox="0 0 24 24"><path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4 0-8 2-8 5v2h16v-2c0-3-4-5-8-5Z"/></svg>
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4 4-6 8-6s7.2 2 8 6"/></svg>
         </button>
       </div>
     </header>
+    <div class="search-wrap">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        <input id="conv-search" type="search" placeholder="بحث في المحادثات" aria-label="بحث في المحادثات">
+      </div>
+    </div>
+    <div class="chips" role="group" aria-label="تصفية المحادثات">
+      <button class="chip-btn" data-filter="all" aria-pressed="true">الكل</button>
+      <button class="chip-btn" data-filter="unread" aria-pressed="false">غير مقروءة</button>
+      <button class="chip-btn" data-filter="groups" aria-pressed="false">المجموعات</button>
+    </div>
     <div id="net-banner" class="net-banner" hidden>لا يوجد اتصال — الرسائل بتوصل أول ما يرجع النت</div>
     <main class="scroll">
       <ul id="conv-list" class="conv-list"></ul>
-      <p id="conv-empty" class="empty" hidden>ما عندك محادثات للحين. اضغط زر ＋ وابدأ محادثة مع زميل.</p>
+      <p id="conv-empty" class="empty" hidden>لا توجد محادثات بعد. اضغط "محادثة جديدة" وابدأ مع زميل.</p>
       <p id="conv-error" class="empty error" hidden></p>
     </main>
-    <button id="btn-new" class="fab" aria-label="محادثة جديدة">
-      <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
+    <button id="btn-new" class="fab">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      محادثة جديدة
     </button>
   </section>
 
@@ -70,7 +87,7 @@
   <section id="view-chat" class="view chat" hidden>
     <header class="topbar">
       <button class="icon-btn back" data-back aria-label="رجوع">
-        <svg viewBox="0 0 24 24"><path d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
       </button>
       <button id="chat-head" class="chat-head">
         <span id="chat-avatar" class="avatar sm"></span>
@@ -81,29 +98,32 @@
       </button>
     </header>
     <main id="msg-scroll" class="scroll messages">
-      <button id="btn-older" class="btn ghost small center-block" hidden>رسائل أقدم</button>
+      <button id="btn-older" class="btn ghost small center-block" hidden>عرض رسائل أقدم</button>
       <div id="msg-list"></div>
-      <p id="msg-empty" class="empty" hidden>ما فيه رسائل للحين. اكتب أول رسالة.</p>
+      <p id="msg-empty" class="empty" hidden>لا توجد رسائل بعد. اكتب أول رسالة.</p>
     </main>
     <form id="composer" class="composer">
       <textarea id="msg-input" rows="1" maxlength="4000" placeholder="اكتب رسالة" aria-label="نص الرسالة"></textarea>
       <button id="btn-send" type="submit" class="send" aria-label="إرسال" disabled>
-        <svg viewBox="0 0 24 24"><path d="M20.6 3.6 3 12l17.6 8.4V14L8 12l12.6-2z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20 4L3 11.5l7 2 2 7z"/><path d="M20 4l-10 9.5"/></svg>
       </button>
     </form>
-    <p id="composer-locked" class="composer-locked" hidden>هذي قناة إعلانات — الكتابة للإدارة فقط</p>
+    <p id="composer-locked" class="composer-locked" hidden>قناة الإعلانات — الكتابة للإدارة فقط</p>
   </section>
 
   <!-- ===== محادثة جديدة ===== -->
   <section id="view-new" class="view" hidden>
     <header class="topbar">
       <button class="icon-btn back" data-back aria-label="رجوع">
-        <svg viewBox="0 0 24 24"><path d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
       </button>
       <h1 id="new-title">محادثة جديدة</h1>
     </header>
     <div class="search-wrap">
-      <input id="emp-search" type="search" placeholder="ابحث بالاسم أو القسم" aria-label="بحث">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        <input id="emp-search" type="search" placeholder="ابحث بالاسم أو القسم" aria-label="بحث">
+      </div>
     </div>
     <div id="group-bar" class="group-bar" hidden>
       <label for="group-name" class="sr-only">اسم المجموعة</label>
@@ -112,7 +132,8 @@
     </div>
     <main class="scroll">
       <button id="btn-group-mode" class="row-action">
-        <span class="avatar sm group-ico">＋</span> مجموعة جديدة
+        <span class="avatar sm group group-ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.5 3.3-5.5 6.5-5.5s5.9 2 6.5 5.5"/><path d="M19 8v6M16 11h6"/></svg></span>
+        مجموعة جديدة
       </button>
       <div id="emp-list"></div>
     </main>
@@ -122,24 +143,28 @@
   <section id="view-admin" class="view" hidden>
     <header class="topbar">
       <button class="icon-btn back" data-back aria-label="رجوع">
-        <svg viewBox="0 0 24 24"><path d="M8.6 5.4 10 4l8 8-8 8-1.4-1.4 6.6-6.6z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
       </button>
-      <h1>الموظفين</h1>
+      <h1>إدارة الموظفين</h1>
     </header>
     <div class="search-wrap">
-      <input id="admin-search" type="search" placeholder="ابحث بالاسم أو الرقم" aria-label="بحث">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+        <input id="admin-search" type="search" placeholder="ابحث بالاسم أو الرقم الوظيفي" aria-label="بحث">
+      </div>
     </div>
     <main class="scroll">
       <div id="admin-list"></div>
+      <div style="height:96px"></div>
     </main>
-    <button id="btn-add-emp" class="fab" aria-label="إضافة موظف">
-      <svg viewBox="0 0 24 24"><path d="M11 5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
+    <button id="btn-add-emp" class="fab">
+      <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      إضافة موظف
     </button>
   </section>
 
 </div>
 
-<!-- ===== نافذة سفلية عامة ===== -->
 <dialog id="sheet" class="sheet">
   <div id="sheet-body"></div>
 </dialog>
@@ -148,6 +173,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js?v=2"></script>
-<script src="app.js?v=2"></script>
+<script src="app.js?v=3"></script>
 </body>
 </html>
